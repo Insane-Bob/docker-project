@@ -15,14 +15,13 @@ RUN chown postgres:postgres /run/postgresql/
 
 # Utiliser l'utilisateur postgres
 USER postgres
-RUN cd
 
 # Créer un répertoire pour les données
-RUN mkdir /var/lib/postgresql/data
-RUN chmod 0700 /var/lib/postgresql/data
+# RUN mkdir /var/lib/postgresql/data
+# RUN chmod 0700 /var/lib/postgresql/data
 
 # Initialiser la base de données
-RUN initdb -D /var/lib/postgresql/data
+# RUN initdb -D /var/lib/postgresql/data
 
 # # Démarrer le serveur
 # RUN pg_ctl start -D /var/lib/postgresql/data
@@ -30,8 +29,6 @@ RUN initdb -D /var/lib/postgresql/data
 # # Autoriser les connexions à distance
 # RUN echo "host all all 0.0.0.0/0 md5" >> /var/lib/postgresql/data/pg_hba.conf
 # RUN echo "listen_addresses='*'" >> /var/lib/postgresql/data/postgresql.conf
-
-USER root
 
 # RUN touch /etc/local.d/postgres-custom.start
 # RUN chmod +x /etc/local.d/postgres-custom.start
@@ -42,16 +39,28 @@ USER root
 
 # RUN openrc
 
-RUN touch /scripts.sh
+# RUN touch /scripts.sh
 
-RUN echo "host all  all    0.0.0.0/0  md5" >> /var/lib/postgresql/data/pg_hba.conf
-RUN su - postgres -c "pg_ctl start -D /var/lib/postgresql/data -l /var/lib/postgresql/log.log && psql --command \"ALTER USER postgres WITH ENCRYPTED PASSWORD 'postgres';\" && psql --command \"CREATE DATABASE builddb;\""
+# RUN echo "host all  all    0.0.0.0/0  md5" >> /var/lib/postgresql/data/pg_hba.conf
+# RUN su - postgres -c "pg_ctl start -D /var/lib/postgresql/data -l /var/lib/postgresql/log.log && psql --command \"ALTER USER postgres WITH ENCRYPTED PASSWORD 'postgres';\" && psql --command \"CREATE DATABASE builddb;\""
 
-RUN echo "#!/bin/sh" >> /scripts.sh
-RUN echo "su postgres -c 'pg_ctl start -D /var/lib/postgresql/data'" >> /scripts.sh
-RUN echo "psql -U postgres" >> /scripts.sh
+# RUN echo "#!/bin/sh" >> /scripts.sh
+# RUN echo "su postgres -c 'pg_ctl start -D /var/lib/postgresql/data'" >> /scripts.sh
+# RUN echo "psql -U postgres" >> /scripts.sh
+
+# RUN chown postgres /var/lib/postgresql/data
 
 EXPOSE 5432
 
 
-CMD ["sh", "/scripts.sh"]
+# Copie du script entrypoint.sh dans l'image
+COPY entrypoint.sh /entrypoint.sh
+
+# Rendre le script exécutable
+USER root
+RUN chmod +x /entrypoint.sh
+
+USER postgres
+WORKDIR /
+# Définir le script entrypoint.sh comme point d'entrée
+ENTRYPOINT ./entrypoint.sh
