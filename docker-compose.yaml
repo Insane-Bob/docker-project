@@ -16,3 +16,24 @@ services:
       - "8080:8080"  
     depends_on:
       - database
+
+  composer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./app:/app
+
+  # symfony:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - .:/app
+  #   ports:
+  #     - "8000:8000"
+  #   depends_on:
+  #     - database
+  #     - composer
+  #   environment:
+  #     DATABASE_URL: postgres://postgres:postgres@database:5432/postgres
