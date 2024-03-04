@@ -21,7 +21,7 @@ services:
     image: prumme/custom-composer
 
   symfony:
-    image: prumme/custom-symfo
+    image: prumme/custom-symfony
     ports:
       - "8000:8000"
     depends_on:
