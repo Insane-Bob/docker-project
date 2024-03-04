@@ -1,0 +1,44 @@
+# On part d'une image alpine
+FROM alpine:latest
+
+# On ajoute tous les paquets nécessaires pour faire tourner Symfony
+RUN apk add --no-cache \
+    curl \
+    php \
+    php-fpm \
+    php-opcache \
+    php-gd \
+    php-mysqli \
+    php-zlib \
+    php-curl \
+    php-mbstring \
+    php-json \
+    php-session \
+    php-xml \
+    php-iconv \
+    php-tokenizer \
+    php-simplexml \
+    php-dom \
+    php-xmlwriter \
+    php-ctype \
+    php-fileinfo \
+    php-pdo \
+    php-pdo_mysql \
+    php-phar \
+    tzdata \
+    bash
+
+# On installe composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+
+# On installe Symfony
+RUN curl -sS https://get.symfony.com/cli/installer | bash
+
+# On crée un projet Symfony dans /var/www/html/symfony
+RUN composer create-project symfony/skeleton /var/www/html/symfony
+
+# On expose le port 8000 afin de pouvoir accéder à notre application sur localhost:8000
+EXPOSE 8000
+
+# On lance le serveur Symfony en lui indiquant le chemin du dossier public
+ENTRYPOINT ["/root/.symfony5/bin/symfony", "server:start", "--dir=/var/www/html/symfony/public"]
