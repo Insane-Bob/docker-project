@@ -19,19 +19,11 @@ services:
 
   composer:
     image: prumme/custom-composer
-    volumes:
-      - ./app:/app
 
-  # symfony:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - .:/app
-  #   ports:
-  #     - "8000:8000"
-  #   depends_on:
-  #     - database
-  #     - composer
-  #   environment:
-  #     DATABASE_URL: postgres://postgres:postgres@database:5432/postgres
+  symfony:
+    image: prumme/custom-symfo
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+      - composer
