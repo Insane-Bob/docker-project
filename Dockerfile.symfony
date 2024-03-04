@@ -29,7 +29,7 @@ RUN apk add --no-cache \
     bash
 
 # On installe composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+COPY --from=prumme/custom-composer /usr/bin/composer /usr/bin/composer
 
 # On installe Symfony
 RUN curl -sS https://get.symfony.com/cli/installer | bash
