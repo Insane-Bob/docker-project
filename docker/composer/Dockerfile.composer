@@ -1,7 +1,10 @@
 FROM alpine:latest
 
+# Installation de PHP
 RUN apk update && apk upgrade
 
+# Installation des dépendances
 RUN apk add curl php php-curl php-openssl git php-phar php-iconv php-mbstring
 
+# Installation de Composer
 RUN curl https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer

@@ -33,5 +33,6 @@ fi
 
 # Votre code personnalisé ici (par exemple, création de bases de données ou d'utilisateurs)
 
+
 # Boucle infinie pour garder le conteneur en fonctionnement
 tail -f /dev/null
